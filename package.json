@@ -1,0 +1,34 @@
+{
+  "name": "mern-template",
+  "version": "1.0.0",
+  "description": "A template for MERN projects",
+  "main": "server.js",
+  "scripts": {
+    "initial-setup": "npx create-react-app client; npm install bcryptjs config cors express express-validator jsonwebtoken mongoose uuid; npm instal --save-dev concurrently nodemon; npm install --prefix client axios json-server prop-type react-redux react-router-dom redux-devtools-extension redux-thunk redux; mkdir \"config\" \"controllers\" \"middleware\" \"models\" \"routes\";",
+    "start": "node server.js",
+    "client": "npm start --prefix client",
+    "server": "nodemon server.js",
+    "json-server": "npm run js-server --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dev-frontend": "concurrently \"npm run client\" \"npm run json-server\"",
+    "heroku-postbuild": "npm install --only=dev --prefix client && npm install --prefix client && npm run build --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/centanomics/mern-template.git"
+  },
+  "keywords": [
+    "template",
+    "MERN",
+    "mongo",
+    "express",
+    "react",
+    "node"
+  ],
+  "author": "Centanomics",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/centanomics/mern-template/issues"
+  },
+  "homepage": "https://github.com/centanomics/mern-template#readme"
+}
