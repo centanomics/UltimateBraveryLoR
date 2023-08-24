@@ -1,34 +1,40 @@
 {
-  "name": "mern-template",
-  "version": "1.0.0",
-  "description": "A template for MERN projects",
-  "main": "server.js",
+  "name": "gatsby-starter-default",
+  "private": true,
+  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "version": "0.1.0",
+  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "dependencies": {
+    "gatsby": "^5.11.0",
+    "gatsby-plugin-image": "^3.11.0",
+    "gatsby-plugin-manifest": "^5.11.0",
+    "gatsby-plugin-sharp": "^5.11.0",
+    "gatsby-source-filesystem": "^5.11.0",
+    "gatsby-transformer-sharp": "^5.11.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.8"
+  },
+  "keywords": [
+    "gatsby"
+  ],
+  "license": "0BSD",
   "scripts": {
-    "initial-setup": "npx create-react-app client; npm install bcryptjs config cors express express-validator jsonwebtoken mongoose uuid; npm instal --save-dev concurrently nodemon; npm install --prefix client axios json-server prop-type react-redux react-router-dom redux-devtools-extension redux-thunk redux; mkdir \"config\" \"controllers\" \"middleware\" \"models\" \"routes\";",
-    "start": "node server.js",
-    "client": "npm start --prefix client",
-    "server": "nodemon server.js",
-    "json-server": "npm run js-server --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "dev-frontend": "concurrently \"npm run client\" \"npm run json-server\"",
-    "heroku-postbuild": "npm install --only=dev --prefix client && npm install --prefix client && npm run build --prefix client"
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css}\"",
+    "start": "gatsby develop",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/centanomics/mern-template.git"
+    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
   },
-  "keywords": [
-    "template",
-    "MERN",
-    "mongo",
-    "express",
-    "react",
-    "node"
-  ],
-  "author": "Centanomics",
-  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/centanomics/mern-template/issues"
-  },
-  "homepage": "https://github.com/centanomics/mern-template#readme"
+    "url": "https://github.com/gatsbyjs/gatsby/issues"
+  }
 }
