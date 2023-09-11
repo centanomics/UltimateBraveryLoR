@@ -17,7 +17,6 @@ app.use(express.json({ extended: false }));
 
 //define routes
 
-
 //Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
   // Set Static Folder
