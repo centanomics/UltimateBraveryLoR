@@ -61,7 +61,6 @@ const GetCards = async () => {
     ...set7b,
     ...set8,
   ];
-  // console.log(cards.length);
   return cards;
 };
 
