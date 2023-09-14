@@ -44,6 +44,11 @@ const GetCards = async () => {
   );
   const set7b = await set7bresponse.json();
 
+  const set8response = await fetch(
+    'https://raw.githubusercontent.com/InFinity54/LoR_DDragon_Set8/4c5b0fc6fd4fb0f5af37bb2a77e8cfbdf9df727c/data/set8-en_us.json'
+  );
+  const set8 = await set8response.json();
+
   const cards = [
     ...set1,
     ...set2,
@@ -54,9 +59,12 @@ const GetCards = async () => {
     ...set6cde,
     ...set7,
     ...set7b,
+    ...set8,
   ];
-
+  // console.log(cards.length);
   return cards;
 };
 
-module.exports = GetCards;
+// GetCards()
+
+module.exports.GetCards = GetCards;
