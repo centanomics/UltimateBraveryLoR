@@ -80,18 +80,28 @@ const RandomDeckGenerator = async () => {
   // console.log(cards.length);
 
   // jhin filter
-  cards = cards.filter((card) => {
-    if (card.supertype != 'Champion') {
-      card.associatedCardRefs;
-    }
-  });
-  console.log(cards.length);
+  // cards = cards.filter((card) => {
+  //   let validCard = false;
+  //   if (card.rarity != 'Champion' && card.type == 'Unit') {
+  //     card.associatedCardRefs.map((ref) => {
+  //       let refCard = allCards.find((element) => element.cardCode == ref);
+  //       if (
+  //         refCard.keywords.indexOf('Skill') != -1 &&
+  //         refCard.type == 'Ability'
+  //       ) {
+  //         validCard = true;
+  //       }
+  //     });
+  //   }
+  //   return validCard;
+  // });
+  // console.log(cards.length);
 
   // ryze filter
-  // cards = cards.filter(
-  //   (card) => card.supertype != 'Champion' && card.subtypes[0] == 'WEAPONMASTER'
-  // );
-  // console.log(cards.length);
+  cards = cards.filter(
+    (card) => card.supertype != 'Champion' && card.subtypes[0] == 'WEAPONMASTER'
+  );
+  console.log(cards.length);
 
   // varus filter
   // cards = cards.filter(
