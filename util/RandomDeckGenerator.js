@@ -1,13 +1,5 @@
 const { GetCards } = require('./GetCards');
-const NeekoSubtypes = [
-  'BIRD',
-  'CAT',
-  'DOG',
-  'ELNUK',
-  'FAE',
-  'REPTILE',
-  'SPIDER',
-];
+const runeterran = require('./runeterran');
 const RandomDeckGenerator = async () => {
   const deck = [];
 
@@ -55,8 +47,9 @@ const RandomDeckGenerator = async () => {
   //   (card) =>
   //     card.supertype != 'Champion' &&
   //     card.type == 'Unit' &&
-  //     card.subtypes.filter((subtype) => NeekoSubtypes.indexOf(subtype) != -1)
-  //       .length != 0
+  //     card.subtypes.filter(
+  //       (subtype) => runeterran.neekoSubtypes.indexOf(subtype) != -1
+  //     ).length != 0
   // );
   // cards.map((card) => console.log(card.name));
   // console.log(cards.length);
@@ -98,10 +91,10 @@ const RandomDeckGenerator = async () => {
   // console.log(cards.length);
 
   // ryze filter
-  cards = cards.filter(
-    (card) => card.supertype != 'Champion' && card.subtypes[0] == 'WEAPONMASTER'
-  );
-  console.log(cards.length);
+  // cards = cards.filter(
+  //   (card) => runeterran.ryzeCards.indexOf(card.cardCode) != -1
+  // );
+  // console.log(cards.length);
 
   // varus filter
   // cards = cards.filter(
