@@ -1,6 +1,18 @@
 // random variables to help with deck filtering for runeterran regions
 
 module.exports = {
+  runeterranChamps: [
+    'JAX',
+    'NEEKO',
+    'BARD',
+    'EVELYNN',
+    'JHIN',
+    'RYZE',
+    'VARUS',
+    'KAYN',
+    'THE PORO KING',
+    'AATROX',
+  ],
   neekoSubtypes: ['BIRD', 'CAT', 'DOG', 'ELNUK', 'FAE', 'REPTILE', 'SPIDER'],
   ryzeCards: [
     '04SH083',

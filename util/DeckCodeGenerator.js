@@ -1,7 +1,7 @@
 const { DeckEncoder } = require('runeterra');
 
 const DeckCodeGenerator = async (deck) => {
-  const code = DeckEncoder.encode(deck);
+  const code = await DeckEncoder.encode(deck);
 
   return code;
 };

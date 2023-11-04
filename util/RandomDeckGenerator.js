@@ -1,7 +1,12 @@
 const { GetCards } = require('./GetCards');
+const runeterranFilter = require('./runeterranFilter');
 const runeterran = require('./runeterran');
+const DeckCodeGenerator = require('./DeckCodeGenerator');
+const { Card } = require('runeterra');
 const RandomDeckGenerator = async () => {
   const deck = [];
+  let deckRegions = [];
+  let hasRuneterran = false;
 
   let allCards = await GetCards();
   // removes cards that dont have a rarity (tokens, lvl2s, etc)
@@ -11,122 +16,94 @@ const RandomDeckGenerator = async () => {
     (card) => card.formats.indexOf('Standard') != -1
   );
 
-  // console.log(cards);
+  //filter by champions (6 max, 3-3 split)
+  let champCards = cards.filter((card) => card.supertype == 'Champion');
+  for (let i = 0; i < 2; i++) {
+    //rng choose a champion
+    // add 3 of that champ card to the deck list
+    // add a region (check runeterran >> multi region >> rest)
+    // remove the champion from the list of champ cards
+    let rngChamp = champCards[Math.floor(Math.random() * champCards.length)];
+    console.log(rngChamp.name);
+    const newCard = new Card();
+    newCard.code = rngChamp.cardCode;
+    newCard.count = 3;
+    deck.push(newCard);
+    champCards = champCards.filter((card) => card.name != rngChamp.name);
+    if (rngChamp.regions[0] == 'Runeterra') {
+      deckRegions.push(rngChamp.name.toUpperCase());
+      hasRuneterran = true;
+    } else if (rngChamp.regions.length == 2) {
+      deckRegions.push(rngChamp.regions[Math.floor(Math.random() * 2)]);
+    } else {
+      deckRegions.push(rngChamp.regions[0]);
+    }
+  }
+  //removes duplicates if two of the same region were chosen
+  deckRegions = [...new Set(deckRegions)];
 
-  /*//STANDARD RULES
-  1. 40 STANDARD CARDS card.formats contains standard
-  3. only 6 champion cards supertype = Champion, type == unit
-  4. only two regions ( including runeterran champions)
+  //sorts the cards by regions before rnging the last 36
+  let filteredCards = [];
+  if (hasRuneterran) {
+    for (let i = 0; i < deckRegions.length; i++) {
+      if (runeterran.runeterranChamps.indexOf(deckRegions[i]) != -1) {
+        let tempCards = await runeterranFilter(cards, deckRegions[i], allCards);
+        filteredCards = filteredCards.concat(tempCards);
+      } else {
+        let tempCards = cards.filter(
+          (card) => card.regions.indexOf(deckRegions[i]) != -1
+        );
+        filteredCards = filteredCards.concat(tempCards);
+      }
+    }
+  } else {
+    for (let i = 0; i < deckRegions.length; i++) {
+      let tempCards = cards.filter(
+        (card) => card.regions.indexOf(deckRegions[i]) != -1
+      );
+      filteredCards = filteredCards.concat(tempCards);
+    }
+  }
+  filteredCards = [...new Set(filteredCards)];
+  filteredCards = filteredCards.filter((card) => card.supertype != 'Champion');
 
-  jax = card.subtype[0] = 'WEAPONMASTER'
-  neeko = card.subtype[0].indexOf() != -1 (using method on array with neeko origin)
-  bard = any card that plants chimes
-  evelynn = card.supertype != champion && card.description.indexOf('summon a random husk') != -1
-  jhin = followers with skills
-  ryze = non targeted burst and focus spells
-  varus = card.subtype[0] = 'CULTIST'
-  kayn = card.subtype[0] = 'CULTIST'
-  poro king = card.supertype != champion && card.description.indexOf('poro') != -1
-  aatrox = card.supertype != champion && card.subtype[0] = 'DARKIN'
+  // console.log(deckRegions);
 
-  filtering rules
-  1. filter out rarity = none (gets rid of tokens)
-  2. filter champions > get a random champion
-  3. check for runeterran champion
-
-  */
-
-  // jax filter
-  // cards = cards.filter(
-  //   (card) => card.supertype != 'Champion' && card.subtypes[0] == 'WEAPONMASTER'
-  // );
-  // console.log(cards.length);
-
-  // neeko filter
-  // cards = cards.filter(
-  //   (card) =>
-  //     card.supertype != 'Champion' &&
-  //     card.type == 'Unit' &&
-  //     card.subtypes.filter(
-  //       (subtype) => runeterran.neekoSubtypes.indexOf(subtype) != -1
-  //     ).length != 0
-  // );
-  // cards.map((card) => console.log(card.name));
-  // console.log(cards.length);
-
-  // bard filter
-  // cards = cards.filter(
-  //   (card) =>
-  //     card.supertype != 'Champion' &&
-  //     (card.associatedCardRefs.indexOf('06RU001T3') != -1 ||
-  //       card.cardCode == '07BC020')
-  // );
-  // console.log(cards.length);
-  // cards.map((card) => console.log(card.name));
-
-  // evelynn filter
-  // cards = cards.filter(
-  //   (card) =>
-  //     card.supertype != 'Champion' &&
-  //     card.descriptionRaw.toLowerCase().indexOf('summon a random husk') != -1
-  // );
-  // console.log(cards.length);
-
-  // jhin filter
-  // cards = cards.filter((card) => {
-  //   let validCard = false;
-  //   if (card.rarity != 'Champion' && card.type == 'Unit') {
-  //     card.associatedCardRefs.map((ref) => {
-  //       let refCard = allCards.find((element) => element.cardCode == ref);
-  //       if (
-  //         refCard.keywords.indexOf('Skill') != -1 &&
-  //         refCard.type == 'Ability'
-  //       ) {
-  //         validCard = true;
-  //       }
-  //     });
-  //   }
-  //   return validCard;
-  // });
-  // console.log(cards.length);
-
-  // ryze filter
-  // cards = cards.filter(
-  //   (card) => runeterran.ryzeCards.indexOf(card.cardCode) != -1
-  // );
-  // console.log(cards.length);
-
-  // varus filter
-  // cards = cards.filter(
-  //   (card) => card.supertype != 'Champion' && card.subtypes[0] == 'CULTIST'
-  // );
-  // console.log(cards.length);
-
-  // kayn filter
-  // cards = cards.filter(
-  //   (card) => card.supertype != 'Champion' && card.subtypes[0] == 'CULTIST'
-  // );
-  // console.log(cards.length);
-
-  // poro king filter
-  // cards = cards.filter(
-  //   (card) =>
-  //     card.supertype != 'Champion' &&
-  //     (card.descriptionRaw.toLowerCase().indexOf('poro') != -1 ||
-  //       card.name.toLowerCase().indexOf('poro') != -1 ||
-  //       card.subtypes[0] == 'PORO')
-  // );
-  // console.log(cards.length);
-
-  // aatrox filter
-  // cards = cards.filter(
-  //   (card) => card.supertype != 'Champion' && card.subtypes[0] == 'DARKIN'
-  // );
-  // console.log(cards.length);
-
+  //rngs the last 36 cards. checks if card exists in the deck before adding it
+  let i = 6;
+  while (i < 40) {
+    let card = filteredCards[Math.floor(Math.random() * filteredCards.length)];
+    let deckCard = deck.filter((dCard) => dCard.code == card.cardCode);
+    if (deckCard.length === 0) {
+      let newCard = new Card();
+      newCard.code = card.cardCode;
+      newCard.count = 1;
+      deck.push(newCard);
+    } else {
+      // console.log('hi');
+      let newCard = deckCard[0];
+      let index = deck.indexOf(newCard);
+      newCard.count++;
+      // console.log(newCard);
+      if (newCard.count != 3) {
+        deck[index] = newCard;
+      } else {
+        continue;
+      }
+    }
+    // console.log(deck);
+    let count = 0;
+    deck.map((card) => (count += card.count));
+    i = count;
+  }
+  // let finalCount = 0;
+  // deck.map((card) => (finalCount += card.count));
+  // console.log('final', deck);
+  // const deckCode = await DeckCodeGenerator(deck);
+  // console.log(deckCode);
   return deck;
 };
 
-RandomDeckGenerator();
+// RandomDeckGenerator();
 
 module.exports = RandomDeckGenerator;
