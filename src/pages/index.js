@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Link } from 'gatsby';
-import { StaticImage } from 'gatsby-plugin-image';
+// import { Link } from 'gatsby';
+// import { StaticImage } from 'gatsby-plugin-image';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
-import * as styles from '../components/index.module.css';
+// import * as styles from '../components/index.module.css';
 
 import RandomDeckGenerator from '../../util/RandomDeckGenerator';
 import DeckCodeGenerator from '../../util/DeckCodeGenerator';
@@ -24,6 +24,19 @@ const IndexPage = () => {
       <h1>Welcome to Ultamite Bravery LOR</h1>
       <button onClick={generateDeckCode}>LET'S GO</button>
       <div>{deckCode !== '' && deckCode !== null ? <p>{deckCode}</p> : ''}</div>
+      <div>
+        {!deck ? (
+          ''
+        ) : (
+          <div>
+            {deck.map((card) => (
+              <p>
+                {card.code} : {card.count}
+              </p>
+            ))}
+          </div>
+        )}
+      </div>
     </Layout>
   );
 };
