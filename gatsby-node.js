@@ -30,12 +30,12 @@ exports.sourceNodes = async ({
   const { createNode } = actions;
 
   let allCards = await GetCards();
-  const myData = { cards: allCards, key: 123 };
+  const myData = { cards: allCards };
 
   const nodeContent = JSON.stringify(myData);
 
   const nodeMeta = {
-    id: createNodeId(`my-data-${myData.key}`),
+    id: createNodeId(`my-data-${myData.cards}`),
     parent: null,
     children: [],
     internal: {
