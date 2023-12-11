@@ -116,6 +116,7 @@ const edCards = async (cards) => {
     (card) =>
       card.supertype !== 'Champion' && card.type === 'Unit' && card.cost >= 6
   );
+  return cards;
 };
 
 const runeterranFilter = async (cards, champion, allCards) => {
