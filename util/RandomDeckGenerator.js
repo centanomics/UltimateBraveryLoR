@@ -6,18 +6,48 @@ const RandomDeckGenerator = async (allCards, format) => {
   const deck = [];
   let deckRegions = [];
   let hasRuneterran = false;
+  let maxCards = 3;
+  let maxChamps = 6;
+  let maxRegions = 2;
 
-  // let allCards = await GetCards();
   // removes cards that dont have a rarity (tokens, lvl2s, etc)
   let collectibleCards = allCards.filter((card) => card.collectible);
-  // filters to the format specified
-  let cards = collectibleCards.filter(
-    (card) => card.formats.indexOf('Standard') !== -1
-  );
 
-  //filter by champions (6 max, 3-3 split)
+  // filters to the format specified
+  let cards = null;
+
+  //singleton is presumed to be eternal pls god dont let there be standard singleton
+  switch (format) {
+    case 'Standard':
+      cards = collectibleCards.filter(
+        (card) => card.formats.indexOf('Standard') !== -1
+      );
+      break;
+    case 'Eternal':
+      cards = collectibleCards;
+      break;
+    case 'Singleton':
+      cards = collectibleCards;
+      maxCards = 1;
+      maxRegions = 3;
+      break;
+    case 'Commons Only':
+      cards = collectibleCards.filter(
+        (card) => card.rarity === 'COMMON' || card.rarity === 'CHAMPION'
+      );
+      maxChamps = 4;
+      break;
+    case 'Even Cost Cards':
+      cards = collectibleCards.filter((card) => card.cost % 2 === 0);
+      break;
+    default:
+      break;
+  }
+
+  //filter by champions (6 max, 3-3 split for standard/eternal/even cost)
   let champCards = cards.filter((card) => card.supertype === 'Champion');
-  for (let i = 0; i < 2; i++) {
+  let champCount = 0;
+  while (champCount < maxChamps) {
     //rng choose a champion
     // add 3 of that champ card to the deck list
     // add a region (check runeterran >> multi region >> rest)
@@ -26,18 +56,28 @@ const RandomDeckGenerator = async (allCards, format) => {
     console.log(rngChamp.name);
     const newCard = new Card();
     newCard.code = rngChamp.cardCode;
-    newCard.count = 3;
-    deck.push(newCard);
-    champCards = champCards.filter((card) => card.name !== rngChamp.name);
-    if (rngChamp.regions[0] === 'Runeterra') {
-      deckRegions.push(rngChamp.name.toUpperCase());
-      hasRuneterran = true;
-    } else if (rngChamp.regions.length === 2) {
-      deckRegions.push(rngChamp.regions[Math.floor(Math.random() * 2)]);
+    newCard.count =
+      format === 'Singleton' ? 1 : format === 'Even Cost Cards' ? 2 : 3;
+    console.log(deckRegions.length);
+    if (deckRegions.length < maxRegions) {
+      deck.push(newCard);
+      champCards = champCards.filter((card) => card.name !== rngChamp.name);
+      // checks for regions runeterra first then multiregion then single region
+      if (rngChamp.regions[0] === 'Runeterra') {
+        deckRegions.push(rngChamp.name.toUpperCase());
+        hasRuneterran = true;
+      } else if (rngChamp.regions.length === 2) {
+        deckRegions.push(rngChamp.regions[Math.floor(Math.random() * 2)]);
+      } else {
+        deckRegions.push(rngChamp.regions[0]);
+      }
+
+      champCount += newCard.count;
     } else {
-      deckRegions.push(rngChamp.regions[0]);
+      continue;
     }
   }
+
   //removes duplicates if two of the same region were chosen
   deckRegions = [...new Set(deckRegions)];
   console.log(deckRegions);
@@ -72,7 +112,7 @@ const RandomDeckGenerator = async (allCards, format) => {
 
   //rngs the last 36 cards. checks if card exists in the deck before adding it
   //
-  let i = 6;
+  let i = maxChamps;
   while (i < 40) {
     let card = filteredCards[Math.floor(Math.random() * filteredCards.length)];
     let deckCard = deck.filter((dCard) => dCard.code === card.cardCode);
@@ -85,7 +125,7 @@ const RandomDeckGenerator = async (allCards, format) => {
       let newCard = deckCard[0];
       let index = deck.indexOf(newCard);
       newCard.count++;
-      if (newCard.count !== 3) {
+      if (newCard.count !== maxCards) {
         deck[index] = newCard;
       } else {
         continue;
