@@ -33,7 +33,7 @@ const RandomDeckGenerator = async (allCards, format) => {
       break;
     case 'Commons Only':
       cards = collectibleCards.filter(
-        (card) => card.rarity === 'COMMON' || card.rarity === 'CHAMPION'
+        (card) => card.rarity === 'COMMON' || card.rarity === 'Champion'
       );
       maxChamps = 4;
       break;
@@ -57,7 +57,7 @@ const RandomDeckGenerator = async (allCards, format) => {
     const newCard = new Card();
     newCard.code = rngChamp.cardCode;
     newCard.count =
-      format === 'Singleton' ? 1 : format === 'Even Cost Cards' ? 2 : 3;
+      format === 'Singleton' ? 1 : format === 'Commons Only' ? 2 : 3;
     console.log(deckRegions.length);
     if (deckRegions.length < maxRegions) {
       deck.push(newCard);
@@ -105,10 +105,9 @@ const RandomDeckGenerator = async (allCards, format) => {
       filteredCards = filteredCards.concat(tempCards);
     }
   }
+  // console.log(filteredCards);
   filteredCards = [...new Set(filteredCards)];
   filteredCards = filteredCards.filter((card) => card.supertype !== 'Champion');
-
-  // console.log(deckRegions);
 
   //rngs the last 36 cards. checks if card exists in the deck before adding it
   //

@@ -61,7 +61,13 @@ const IndexPage = () => {
       <div className='main-left'>
         <h1>Welcome to Ultamite Bravery LOR</h1>
         <div>
-          {deckCode !== '' && deckCode !== null ? <p>{deckCode}</p> : ''}
+          {deckCode !== '' && deckCode !== null ? (
+            <a href={'https://lor.mobalytics.gg/decks/code/' + deckCode}>
+              {deckCode}
+            </a>
+          ) : (
+            ''
+          )}
         </div>
         <div>
           {!deck ? (
