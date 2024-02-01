@@ -58,11 +58,44 @@ const RandomDeckGenerator = async (allCards, format) => {
     newCard.code = rngChamp.cardCode;
     newCard.count =
       format === 'Singleton' ? 1 : format === 'Commons Only' ? 2 : 3;
-    console.log(deckRegions.length);
+    console.log('Region Count:', deckRegions.length);
+
+    // if (deckRegions.length < maxRegions) {
+    //   deck.push(newCard);
+    //   champCards = champCards.filter((card) => card.name !== rngChamp.name);
+    //   // checks for regions runeterra first then multiregion then single region
+    //   if (rngChamp.regions[0] === 'Runeterra') {
+    //     deckRegions.push(rngChamp.name.toUpperCase());
+    //     hasRuneterran = true;
+    //   } else if (rngChamp.regions.length === 2) {
+    //     deckRegions.push(rngChamp.regions[Math.floor(Math.random() * 2)]);
+    //   } else {
+    //     deckRegions.push(rngChamp.regions[0]);
+    //   }
+
+    //   champCount += newCard.count;
+    //   console.log(champCount, maxChamps);
+    // } else {
+    //   if (champCount < maxChamps) {
+    //     let regionMatch = false;
+    //     for (let i = 0; i++; i < deckRegions) {
+    //       if (rngChamp.regions.indexOf(deckRegions[i] !== -1)) {
+    //         regionMatch = true;
+    //       }
+    //     }
+    //     console.log(regionMatch);
+    //     // if (regionMatch) {
+    //     deck.push(newCard);
+    //     champCount += newCard.count;
+    //     // }
+    //   }
+    //   continue;
+    // }
+
     if (deckRegions.length < maxRegions) {
-      deck.push(newCard);
-      champCards = champCards.filter((card) => card.name !== rngChamp.name);
-      // checks for regions runeterra first then multiregion then single region
+      // if max regions are not reached yet adds the region to the list
+      //checks for regions runeterra first then multiregion then single region
+      // then adds the card
       if (rngChamp.regions[0] === 'Runeterra') {
         deckRegions.push(rngChamp.name.toUpperCase());
         hasRuneterran = true;
@@ -71,10 +104,27 @@ const RandomDeckGenerator = async (allCards, format) => {
       } else {
         deckRegions.push(rngChamp.regions[0]);
       }
-
+      deck.push(newCard);
       champCount += newCard.count;
-    } else {
+      champCards = champCards.filter((card) => card.name !== rngChamp.name);
+      console.log(champCount, maxChamps);
       continue;
+    }
+
+    // else it checks if the generated champ is in the region list
+    // then if so adds the card
+    let inRegion = false;
+    for (let i = 0; i < rngChamp.regions.length; i++) {
+      if (deckRegions.indexOf(rngChamp.regions[i] !== -1)) {
+        inRegion = true;
+      }
+    }
+    console.log(inRegion);
+    if (inRegion) {
+      deck.push(newCard);
+      champCount += newCard.count;
+      champCards = champCards.filter((card) => card.name !== rngChamp.name);
+      console.log(champCount, maxChamps);
     }
   }
 
@@ -121,6 +171,8 @@ const RandomDeckGenerator = async (allCards, format) => {
       newCard.count = 1;
       deck.push(newCard);
     } else {
+      if (format === 'Singleton') continue;
+
       let newCard = deckCard[0];
       let index = deck.indexOf(newCard);
       newCard.count++;
