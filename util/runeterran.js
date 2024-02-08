@@ -12,6 +12,7 @@ module.exports = {
     'KAYN',
     'THE PORO KING',
     'AATROX',
+    'ELDER DRAGON',
   ],
   neekoSubtypes: ['BIRD', 'CAT', 'DOG', 'ELNUK', 'FAE', 'REPTILE', 'SPIDER'],
   ryzeCards: [
