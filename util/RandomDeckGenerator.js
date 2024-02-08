@@ -53,44 +53,12 @@ const RandomDeckGenerator = async (allCards, format) => {
     // add a region (check runeterran >> multi region >> rest)
     // remove the champion from the list of champ cards
     let rngChamp = champCards[Math.floor(Math.random() * champCards.length)];
-    console.log(rngChamp.name);
+    console.log(rngChamp.name, rngChamp.regions);
     const newCard = new Card();
     newCard.code = rngChamp.cardCode;
     newCard.count =
       format === 'Singleton' ? 1 : format === 'Commons Only' ? 2 : 3;
     console.log('Region Count:', deckRegions.length);
-
-    // if (deckRegions.length < maxRegions) {
-    //   deck.push(newCard);
-    //   champCards = champCards.filter((card) => card.name !== rngChamp.name);
-    //   // checks for regions runeterra first then multiregion then single region
-    //   if (rngChamp.regions[0] === 'Runeterra') {
-    //     deckRegions.push(rngChamp.name.toUpperCase());
-    //     hasRuneterran = true;
-    //   } else if (rngChamp.regions.length === 2) {
-    //     deckRegions.push(rngChamp.regions[Math.floor(Math.random() * 2)]);
-    //   } else {
-    //     deckRegions.push(rngChamp.regions[0]);
-    //   }
-
-    //   champCount += newCard.count;
-    //   console.log(champCount, maxChamps);
-    // } else {
-    //   if (champCount < maxChamps) {
-    //     let regionMatch = false;
-    //     for (let i = 0; i++; i < deckRegions) {
-    //       if (rngChamp.regions.indexOf(deckRegions[i] !== -1)) {
-    //         regionMatch = true;
-    //       }
-    //     }
-    //     console.log(regionMatch);
-    //     // if (regionMatch) {
-    //     deck.push(newCard);
-    //     champCount += newCard.count;
-    //     // }
-    //   }
-    //   continue;
-    // }
 
     if (deckRegions.length < maxRegions) {
       // if max regions are not reached yet adds the region to the list
@@ -109,18 +77,28 @@ const RandomDeckGenerator = async (allCards, format) => {
       champCards = champCards.filter((card) => card.name !== rngChamp.name);
       console.log(champCount, maxChamps);
       continue;
+    } else {
+      // once max regions have been hit, filters the champion list into those regions
+      // champCards.filter(
+      //   (card) =>
+      //     card.regions.includes(deckRegions[0]) ||
+      //     card.regions.includes(deckRegions[1]) ||
+      //     card.regions.includes(deckRegions[2])
+      // );
     }
+
+    // console.log();
 
     // else it checks if the generated champ is in the region list
     // then if so adds the card
-    let inRegion = false;
-    for (let i = 0; i < rngChamp.regions.length; i++) {
-      if (deckRegions.indexOf(rngChamp.regions[i] !== -1)) {
-        inRegion = true;
-      }
-    }
-    console.log(inRegion);
-    if (inRegion) {
+    // let inRegion = false;
+    // for (let i = 0; i < rngChamp.regions.length; i++) {
+    //   if (deckRegions.indexOf(rngChamp.regions[i] !== -1)) {
+    //     inRegion = true;
+    //   }
+    // }
+    // console.log(inRegion);
+    if (rngChamp.regions.some((r) => deckRegions.includes(r))) {
       deck.push(newCard);
       champCount += newCard.count;
       champCards = champCards.filter((card) => card.name !== rngChamp.name);
