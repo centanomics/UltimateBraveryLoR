@@ -1,4 +1,14 @@
+:root {
+  --light-bg-color: #FCF8F3;
+  --light-text: #150E05;
+}
+
+
 /* Main Section */
+.body {
+  background-color: var(--light-bg-color);
+  text: var(--light-text);
+}
 
 .main-left {
   width: 600px;
